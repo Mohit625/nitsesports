@@ -32,6 +32,7 @@ import PlexusBackground from "./components/PlexusBackground.jsx";
 import SEO from "./components/SEO.jsx";
 import GamingCursor from "./components/GamingCursor.jsx";
 import AuthCallback from "./pages/AuthCallback.jsx";
+import ScrollToTop from "./pages/ScrollToTop.jsx";
 
 const queryClient = new QueryClient();
 
@@ -173,6 +174,7 @@ const App = () => {
           {/* <GamingCursor /> */}
            <RouteSEO />
           <div className="relative min-h-screen bg-gradient-to-b from-[#050505]/30 via-[#0a0a1f]/20 to-[#000000]/20 text-white flex flex-col z-30">
+        <ScrollToTop />
             <Navigation />
             <MainRoutes />
             <Footer />
