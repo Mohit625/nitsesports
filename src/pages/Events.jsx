@@ -103,7 +103,7 @@ useEffect(() => {
 
   const stats = [
     { value: "1000+", label: "Players" },
-    { value: "₹65,000", label: "Prize pool" },
+    { value: "₹55,000", label: "Prize pool" },
     { value: "5", label: "Competitions" },
   ];
 
