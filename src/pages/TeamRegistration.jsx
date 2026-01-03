@@ -34,8 +34,9 @@ const TeamRegistration = () => {
 
   const [loading, setLoading] = useState(false);
   const [collegeType, setCollegeType] = useState("nits");
-  const substituteCount = gameInfo.substituteCount || 0;
-const totalRequiredPlayers = playerCount + substituteCount;
+  const substituteCount = gameInfo?.substituteCount || 0;
+  const playerCount = gameInfo?.playerCount || 0;
+  const totalRequiredPlayers = playerCount + substituteCount;
   const [formData, setFormData] = useState({
     email: "",
     teamName: "",
@@ -86,7 +87,6 @@ const totalRequiredPlayers = playerCount + substituteCount;
     );
   }
 
-  const playerCount = gameInfo.playerCount;
   const price = collegeType === "nits" ? gameInfo.price.nits : gameInfo.price.other;
 
   const handleInputChange = (field, value) => {
