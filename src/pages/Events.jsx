@@ -22,7 +22,8 @@ const Events = () => {
   const [showClosedPopup, setShowClosedPopup] = useState(false);
   const videoRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState("");
-  const CLOSED_GAMES = ["rc", "bgmi", "ml","valorant"];
+  const CLOSED_GAMES = new Set(["rc", "bgmi", "ml", "valorant"]);
+
 useEffect(() => {
   const updateTimer = () => {
     const now = new Date();
@@ -56,10 +57,11 @@ useEffect(() => {
     setTimeout(() => setToastMessage(""), 3000);
   };
  const handleRegisterClick = async (g) => {
- if (CLOSED_GAMES.includes(g.id)) {
+ if (CLOSED_GAMES.has(g.id)) {
   setShowClosedPopup(true);
   return;
 }
+
   try {
     const { data } = await supabase.auth.getSession();
     const target = `/events/vanguardarena/register/${g.id}`;
@@ -217,18 +219,43 @@ useEffect(() => {
             {games.map((g) => (
               <Card key={g.id} className="glass-card electric-border overflow-hidden">
                 <div className="relative h-40">
-                  <img src={g.image} alt={g.name} className="w-full h-full object-cover" />
-                </div>
-                <CardHeader className="flex items-center justify-between">
-                  <CardTitle className="font-orbitron">{g.name}</CardTitle>
-                  <div className=" font-orbitron text-sm text-muted-foreground font-semibold">
-                    Prize pool: <span className="font-orbitron text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)] font-bold">
-  ₹{g.prize.toLocaleString("en-IN")}
-</span>
+  <img
+    src={g.image}
+    alt={g.name}
+    className="w-full h-full object-cover"
+  />
+
+  {/* 🔴 CLOSED BADGE — TOP RIGHT CORNER */}
+  {CLOSED_GAMES.has(g.id) && (
+    <Badge
+      className="
+        absolute top-3 right-3
+        bg-red-600 text-white
+        font-orbitron text-xs
+        px-2 py-1
+        shadow-lg
+      "
+    >
+      Closed
+    </Badge>
+  )}
+</div>
+
+<CardHeader className="flex items-center justify-between">
+  <div className="flex items-center gap-2">
+    <CardTitle className="font-orbitron">{g.name}</CardTitle>
 
 
-                  </div>
-                </CardHeader>
+  </div>
+
+  <div className="font-orbitron text-sm text-muted-foreground font-semibold">
+    Prize pool:{" "}
+    <span className="font-orbitron text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)] font-bold">
+      ₹{g.prize.toLocaleString("en-IN")}
+    </span>
+  </div>
+</CardHeader>
+
                 <CardContent>
                   <div>
                     <a href={g.brochure} target="_blank" rel="noopener noreferrer">
@@ -237,15 +264,14 @@ useEffect(() => {
                       </Button>
                     </a>
 <Button
-  className="w-full font-orbitron"
-  onClick={() =>
-    new Date() < REGISTRATION_START
-      ? showToast("Registrations open on 01 January 2026")
-      : handleRegisterClick(g)
-  }
+  className={`w-full font-orbitron ${
+    CLOSED_GAMES.has(g.id) ? "opacity-80" : ""
+  }`}
+  onClick={() => handleRegisterClick(g)}
 >
-  Register Team
+  {CLOSED_GAMES.has(g.id) ? "Registration Closed" : "Register Team"}
 </Button>
+
 </div>
                 </CardContent>
               </Card>
