@@ -22,7 +22,7 @@ const Events = () => {
   const [showClosedPopup, setShowClosedPopup] = useState(false);
   const videoRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState("");
-  const CLOSED_GAMES = new Set(["rc", "bgmi","valorant"]);
+  const CLOSED_GAMES = new Set(["rc", "bgmi","valorant","ml"]);
 
 useEffect(() => {
   const updateTimer = () => {
