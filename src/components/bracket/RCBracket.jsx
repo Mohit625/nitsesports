@@ -464,8 +464,8 @@ const RCBracket = ({ canEdit = false }) => {
       {expandedColumn === "finals" && (
         <Card className="glass-card border-border/30 bg-black/50 border-yellow-500/50 shadow-lg shadow-yellow-500/10">
           <CardHeader>
-            <CardTitle className="font-orbitron text-2xl">Final Stage (Top 4)</CardTitle>
-            <p className="text-sm text-muted-foreground mt-2">Semifinals and Championship</p>
+            <CardTitle className="font-orbitron text-2xl">Final Stage (Top 6)</CardTitle>
+            <p className="text-sm text-muted-foreground mt-2">Semifinals, Championship, and Placement Matches</p>
           </CardHeader>
           <CardContent className="space-y-6">
             {canEdit && (
@@ -479,7 +479,7 @@ const RCBracket = ({ canEdit = false }) => {
                 {finalStage.semifinals.map((match, idx) => (
                   <div key={match.id} className="rounded-md border border-border/40 bg-black/80 p-4">
                     <p className="text-sm text-muted-foreground mb-3 font-semibold">Semifinal {idx + 1}</p>
-                    
+
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{match.teamA}</span>
                       {canEdit ? (
@@ -514,10 +514,10 @@ const RCBracket = ({ canEdit = false }) => {
 
             {/* Finals */}
             <div className="space-y-4">
-              <h4 className="font-orbitron text-lg text-yellow-400">Championship Finals (2 Teams → 1 Winner)</h4>
+              <h4 className="font-orbitron text-lg text-yellow-400">Championship Finals (2 Teams → 1st Place)</h4>
               <div className="rounded-md border-2 border-yellow-600/50 bg-gradient-to-br from-yellow-600/20 to-yellow-600/5 p-6">
                 <p className="text-yellow-400 font-semibold mb-4">Grand Finals</p>
-                
+
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-bold text-lg">{finalStage.finals.teamA}</span>
                   {canEdit ? (
@@ -544,6 +544,118 @@ const RCBracket = ({ canEdit = false }) => {
                   ) : (
                     <span className="rounded bg-yellow-500 px-3 py-2 font-orbitron text-black font-bold text-lg">{finalStage.finals.scoreB}</span>
                   )}
+                </div>
+              </div>
+            </div>
+
+            {/* 3rd Place Match */}
+            <div className="space-y-4">
+              <h4 className="font-orbitron text-lg text-amber-500">3rd Place Match (Bronze Medal)</h4>
+              <div className="rounded-md border border-amber-600/50 bg-gradient-to-br from-amber-600/20 to-amber-600/5 p-4">
+                <p className="text-amber-400 font-semibold mb-3">3rd vs 4th Place</p>
+
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium">{finalStage.placementMatches.thirdPlace.teamA}</span>
+                  {canEdit ? (
+                    <Input
+                      type="number"
+                      className="w-12 h-8 text-right bg-amber-500 text-black border-none rounded font-bold"
+                      value={finalStage.placementMatches.thirdPlace.scoreA}
+                      onChange={(e) => handleFinalScoreChange("thirdPlace", "3rd", Number(e.target.value) || 0, finalStage.placementMatches.thirdPlace.scoreB)}
+                    />
+                  ) : (
+                    <span className="rounded bg-amber-500 px-2 py-1 font-orbitron text-black text-sm font-bold">{finalStage.placementMatches.thirdPlace.scoreA}</span>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">{finalStage.placementMatches.thirdPlace.teamB}</span>
+                  {canEdit ? (
+                    <Input
+                      type="number"
+                      className="w-12 h-8 text-right bg-amber-500 text-black border-none rounded font-bold"
+                      value={finalStage.placementMatches.thirdPlace.scoreB}
+                      onChange={(e) => handleFinalScoreChange("thirdPlace", "3rd", finalStage.placementMatches.thirdPlace.scoreA, Number(e.target.value) || 0)}
+                    />
+                  ) : (
+                    <span className="rounded bg-amber-500 px-2 py-1 font-orbitron text-black text-sm font-bold">{finalStage.placementMatches.thirdPlace.scoreB}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* 5th/6th Place Bracket */}
+            <div className="space-y-4">
+              <h4 className="font-orbitron text-lg text-blue-400">5th/6th Place Bracket</h4>
+              <div className="space-y-3">
+                {/* First two matches */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {finalStage.placementMatches.fifthSixthBracket.slice(0, 2).map((match, idx) => (
+                    <div key={match.id} className="rounded-md border border-blue-400/30 bg-blue-950/30 p-4">
+                      <p className="text-sm text-blue-300 mb-3 font-semibold">Quarterfinal Losers Match {idx + 1}</p>
+
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-sm">{match.teamA}</span>
+                        {canEdit ? (
+                          <Input
+                            type="number"
+                            className="w-12 h-8 text-right bg-blue-500 text-black border-none rounded font-bold"
+                            value={match.scoreA}
+                            onChange={(e) => handleFinalScoreChange("fifthSixthBracket", match.id, Number(e.target.value) || 0, match.scoreB)}
+                          />
+                        ) : (
+                          <span className="rounded bg-blue-500 px-2 py-1 font-orbitron text-black text-sm">{match.scoreA}</span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-sm">{match.teamB}</span>
+                        {canEdit ? (
+                          <Input
+                            type="number"
+                            className="w-12 h-8 text-right bg-blue-500 text-black border-none rounded font-bold"
+                            value={match.scoreB}
+                            onChange={(e) => handleFinalScoreChange("fifthSixthBracket", match.id, match.scoreA, Number(e.target.value) || 0)}
+                          />
+                        ) : (
+                          <span className="rounded bg-blue-500 px-2 py-1 font-orbitron text-black text-sm">{match.scoreB}</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Final 5-6 match */}
+                <div className="rounded-md border border-blue-600/50 bg-gradient-to-br from-blue-600/20 to-blue-600/5 p-4">
+                  <p className="text-blue-400 font-semibold mb-3">5th vs 6th Place Final</p>
+
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium">{finalStage.placementMatches.fifthSixthBracket[2].teamA}</span>
+                    {canEdit ? (
+                      <Input
+                        type="number"
+                        className="w-12 h-8 text-right bg-blue-500 text-black border-none rounded font-bold"
+                        value={finalStage.placementMatches.fifthSixthBracket[2].scoreA}
+                        onChange={(e) => handleFinalScoreChange("fifthSixthBracket", finalStage.placementMatches.fifthSixthBracket[2].id, Number(e.target.value) || 0, finalStage.placementMatches.fifthSixthBracket[2].scoreB)}
+                      />
+                    ) : (
+                      <span className="rounded bg-blue-500 px-2 py-1 font-orbitron text-black font-bold">{finalStage.placementMatches.fifthSixthBracket[2].scoreA}</span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">{finalStage.placementMatches.fifthSixthBracket[2].teamB}</span>
+                    {canEdit ? (
+                      <Input
+                        type="number"
+                        className="w-12 h-8 text-right bg-blue-500 text-black border-none rounded font-bold"
+                        value={finalStage.placementMatches.fifthSixthBracket[2].scoreB}
+                        onChange={(e) => handleFinalScoreChange("fifthSixthBracket", finalStage.placementMatches.fifthSixthBracket[2].id, finalStage.placementMatches.fifthSixthBracket[2].scoreA, Number(e.target.value) || 0)}
+                      />
+                    ) : (
+                      <span className="rounded bg-blue-500 px-2 py-1 font-orbitron text-black font-bold">{finalStage.placementMatches.fifthSixthBracket[2].scoreB}</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
