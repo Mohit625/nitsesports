@@ -23,6 +23,7 @@ import LeaderboardFreeFire from "@/components/leaderboards/LeaderboardFreeFire";
 import LeaderboardMl from "@/components/leaderboards/LeaderboardMl";
 import LeaderboardCodm from "@/components/leaderboards/LeaderboardCodm";
 import LeaderboardSimple from "@/components/leaderboards/LeaderboardSimple";
+import RCBracket from "@/components/bracket/RCBracket";
 
 // This is the mock event data, kept in the parent component
 const lockLoadHero = "https://cdn.builder.io/api/v1/image/assets%2F778be80571eb4edd92c70f9fecab8fab%2F21e5721d76704013a2fd522cdf0daa0e?format=webp&width=1600";
