@@ -107,26 +107,66 @@ const RCBracket = ({ canEdit = false }) => {
     setBracket(generateInitialBracket(updatedTeams));
   };
 
+  const getWinner = (match) => {
+    if (match.scoreA === match.scoreB) return null;
+    return match.scoreA > match.scoreB ? match.teamA : match.teamB;
+  };
+
+  const propagateWinnersToNextRound = (updatedBracket, columnIndex) => {
+    // For each match in current column, get winner and place in next round
+    if (columnIndex >= updatedBracket.columns.length - 1) return updatedBracket;
+
+    const currentMatches = updatedBracket.columns[columnIndex].matches;
+    const nextColumn = updatedBracket.columns[columnIndex + 1];
+
+    // Map each pair of matches to their winners
+    currentMatches.forEach((match, matchIndex) => {
+      const winner = getWinner(match);
+      const nextMatchIndex = Math.floor(matchIndex / 2);
+      const isTeamA = matchIndex % 2 === 0;
+
+      if (nextColumn.matches[nextMatchIndex]) {
+        if (winner) {
+          // Winner moves to next round
+          if (isTeamA) {
+            nextColumn.matches[nextMatchIndex].teamA = winner;
+          } else {
+            nextColumn.matches[nextMatchIndex].teamB = winner;
+          }
+        } else {
+          // No winner yet (tie or no scores), set as TBD
+          if (isTeamA) {
+            nextColumn.matches[nextMatchIndex].teamA = "TBD";
+          } else {
+            nextColumn.matches[nextMatchIndex].teamB = "TBD";
+          }
+        }
+      }
+    });
+
+    // Recursively propagate to next rounds
+    if (columnIndex + 1 < updatedBracket.columns.length - 1) {
+      return propagateWinnersToNextRound(updatedBracket, columnIndex + 1);
+    }
+
+    return updatedBracket;
+  };
+
   const handleScoreChange = (colIndex, matchIndex, scoreA, scoreB) => {
     if (!canEdit) return;
 
     setBracket(prev => {
       const newBracket = { ...prev };
-      newBracket.columns = newBracket.columns.map((col, i) => {
-        if (i === colIndex) {
-          return {
-            ...col,
-            matches: col.matches.map((match, idx) => {
-              if (idx === matchIndex) {
-                return { ...match, scoreA, scoreB };
-              }
-              return match;
-            })
-          };
-        }
-        return col;
-      });
-      return newBracket;
+      // Update the current match score
+      newBracket.columns[colIndex].matches[matchIndex] = {
+        ...newBracket.columns[colIndex].matches[matchIndex],
+        scoreA,
+        scoreB
+      };
+
+      // Propagate winners to next rounds
+      const updatedBracket = propagateWinnersToNextRound(newBracket, colIndex);
+      return updatedBracket;
     });
   };
 
