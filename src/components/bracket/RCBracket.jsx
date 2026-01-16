@@ -34,7 +34,15 @@ const RCBracket = ({ canEdit = false }) => {
       { id: "sf1", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null },
       { id: "sf2", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null },
     ],
-    finals: { id: "final", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null }
+    finals: { id: "final", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null },
+    placementMatches: {
+      thirdPlace: { id: "3rd", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null },
+      fifthSixthBracket: [
+        { id: "5-6-match1", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null },
+        { id: "5-6-match2", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null },
+        { id: "5-6-final", teamA: "TBD", teamB: "TBD", scoreA: 0, scoreB: 0, status: "upcoming", time: null }
+      ]
+    }
   });
 
   function generateInitialBracket(teamList) {
