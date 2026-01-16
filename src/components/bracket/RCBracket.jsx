@@ -175,11 +175,22 @@ const RCBracket = ({ canEdit = false }) => {
 
     setFinalStage(prev => {
       if (stage === "semifinals") {
+        const updatedSemifinals = prev.semifinals.map(match =>
+          match.id === matchId ? { ...match, scoreA, scoreB } : match
+        );
+
+        // Get winners from semifinals and update finals
+        const winner1 = getWinner(updatedSemifinals[0]);
+        const winner2 = getWinner(updatedSemifinals[1]);
+
         return {
           ...prev,
-          semifinals: prev.semifinals.map(match => 
-            match.id === matchId ? { ...match, scoreA, scoreB } : match
-          )
+          semifinals: updatedSemifinals,
+          finals: {
+            ...prev.finals,
+            teamA: winner1 || "TBD",
+            teamB: winner2 || "TBD"
+          }
         };
       } else if (stage === "finals") {
         return {
