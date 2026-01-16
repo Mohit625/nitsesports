@@ -82,7 +82,6 @@ const RCBracket = ({ canEdit = false }) => {
       const updatedTeams = [...teams, newTeamName.trim()];
       setTeams(updatedTeams);
       setNewTeamName("");
-      // Regenerate bracket with new teams
       setBracket(generateInitialBracket(updatedTeams));
     }
   };
@@ -98,7 +97,6 @@ const RCBracket = ({ canEdit = false }) => {
       const updatedTeams = [...teams];
       updatedTeams[index] = editingTeamValue.trim();
       setTeams(updatedTeams);
-      // Regenerate bracket with updated teams
       setBracket(generateInitialBracket(updatedTeams));
       setEditingTeamIndex(null);
       setEditingTeamValue("");
@@ -159,235 +157,216 @@ const RCBracket = ({ canEdit = false }) => {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Section 1: Teams Management */}
-      <Card className="glass-card border-border/30 bg-black/50">
-        <CardHeader>
-          <CardTitle className="font-orbitron text-2xl">Section 1: Teams ({teams.length})</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {canEdit && (
-            <div className="flex gap-2 mb-4">
-              <Input
-                placeholder="Add new team..."
-                value={newTeamName}
-                onChange={(e) => setNewTeamName(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleAddTeam()}
-                className="flex-1"
-              />
-              <Button onClick={handleAddTeam} size="sm" className="bg-yellow-600 hover:bg-yellow-700">
-                <Plus className="w-4 h-4 mr-2" />
-                Add Team
-              </Button>
-            </div>
-          )}
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {teams.map((team, index) => (
-              <div key={index} className="relative">
-                {editingTeamIndex === index ? (
-                  <div className="flex gap-2">
-                    <Input
-                      value={editingTeamValue}
-                      onChange={(e) => setEditingTeamValue(e.target.value)}
-                      className="flex-1"
-                      autoFocus
-                    />
-                    <button
-                      onClick={() => handleSaveTeam(index)}
-                      className="p-2 text-green-400 hover:bg-green-400/20 rounded"
-                    >
-                      <Check className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setEditingTeamIndex(null)}
-                      className="p-2 text-red-400 hover:bg-red-400/20 rounded"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-border/40 rounded-lg p-3 flex items-center justify-between group hover:border-yellow-400/50 transition">
-                    <span className="text-sm font-medium truncate">{team}</span>
-                    {canEdit && (
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+    <div className="space-y-6">
+      {/* Main Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* COLUMN 1: Teams */}
+        <div className="space-y-4">
+          <Card className="glass-card border-border/30 bg-black/50 sticky top-20 lg:top-24">
+            <CardHeader>
+              <CardTitle className="font-orbitron text-xl">Column 1: Teams</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2">Total: {teams.length}</p>
+            </CardHeader>
+            <CardContent>
+              {canEdit && (
+                <div className="flex gap-2 mb-4">
+                  <Input
+                    placeholder="Add new team..."
+                    value={newTeamName}
+                    onChange={(e) => setNewTeamName(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleAddTeam()}
+                    className="flex-1 text-xs"
+                    size="sm"
+                  />
+                  <Button onClick={handleAddTeam} size="sm" className="bg-yellow-600 hover:bg-yellow-700">
+                    <Plus className="w-3 h-3" />
+                  </Button>
+                </div>
+              )}
+              
+              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                {teams.map((team, index) => (
+                  <div key={index} className="relative">
+                    {editingTeamIndex === index ? (
+                      <div className="flex gap-1">
+                        <Input
+                          value={editingTeamValue}
+                          onChange={(e) => setEditingTeamValue(e.target.value)}
+                          className="flex-1 text-xs h-8"
+                          autoFocus
+                        />
                         <button
-                          onClick={() => handleEditTeam(index)}
-                          className="p-1.5 text-blue-400 hover:bg-blue-400/20 rounded"
+                          onClick={() => handleSaveTeam(index)}
+                          className="p-1 text-green-400 hover:bg-green-400/20 rounded"
                         >
-                          <Edit2 className="w-4 h-4" />
+                          <Check className="w-3 h-3" />
                         </button>
                         <button
-                          onClick={() => handleDeleteTeam(index)}
-                          className="p-1.5 text-red-400 hover:bg-red-400/20 rounded"
+                          onClick={() => setEditingTeamIndex(null)}
+                          className="p-1 text-red-400 hover:bg-red-400/20 rounded"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <X className="w-3 h-3" />
                         </button>
+                      </div>
+                    ) : (
+                      <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-border/40 rounded-lg p-2 flex items-center justify-between group hover:border-yellow-400/50 transition text-xs">
+                        <span className="truncate font-medium">{team}</span>
+                        {canEdit && (
+                          <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition">
+                            <button
+                              onClick={() => handleEditTeam(index)}
+                              className="p-0.5 text-blue-400 hover:bg-blue-400/20 rounded"
+                            >
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTeam(index)}
+                              className="p-0.5 text-red-400 hover:bg-red-400/20 rounded"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
-                )}
+                ))}
               </div>
-            ))}
-          </div>
+            </CardContent>
+          </Card>
+        </div>
 
-          <div className="mt-4 p-3 bg-blue-400/10 border border-blue-400/30 rounded-lg">
-            <p className="text-sm text-blue-300">
-              💡 <strong>Note:</strong> Teams are automatically paired for Round 1 based on their position in the teams list.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+        {/* COLUMN 2: Single Elimination Bracket */}
+        <div className="space-y-4">
+          <Card className="glass-card border-border/30 bg-black/50">
+            <CardHeader>
+              <CardTitle className="font-orbitron text-xl">Column 2: Elimination</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2">32 → 4 Teams</p>
+            </CardHeader>
+            <CardContent>
+              {canEdit && (
+                <p className="text-xs text-yellow-400 mb-4">✓ Admin Mode: Edit scores</p>
+              )}
+              <div className="bg-black/30 border border-border/20 rounded-lg p-3 overflow-x-auto">
+                <BracketView 
+                  bracket={bracket} 
+                  onScoreChange={canEdit ? handleScoreChange : null}
+                />
+              </div>
 
-      {/* Section 2: Single Elimination Bracket */}
-      <Card className="glass-card border-border/30 bg-black/50">
-        <CardHeader>
-          <CardTitle className="font-orbitron text-2xl">Section 2: Single Elimination Bracket</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground mb-6">
-            {canEdit ? "✓ Admin Mode: You can update match scores" : "Tournament bracket showing all matches"}
-          </p>
-          <div className="bg-black/30 border border-border/20 rounded-lg p-6">
-            <BracketView 
-              bracket={bracket} 
-              onScoreChange={canEdit ? handleScoreChange : null}
-            />
-          </div>
+              {/* Subcolumns Summary */}
+              <div className="mt-4 space-y-2">
+                <div className="bg-blue-950/30 border border-blue-400/20 rounded p-2">
+                  <p className="text-xs font-semibold text-blue-300 mb-1">Subcolumn 1: Round 1</p>
+                  <p className="text-xs text-muted-foreground">16 matches | 32 → 16</p>
+                </div>
+                <div className="bg-purple-950/30 border border-purple-400/20 rounded p-2">
+                  <p className="text-xs font-semibold text-purple-300 mb-1">Subcolumn 2: Round 2</p>
+                  <p className="text-xs text-muted-foreground">8 matches | 16 → 8</p>
+                </div>
+                <div className="bg-pink-950/30 border border-pink-400/20 rounded p-2">
+                  <p className="text-xs font-semibold text-pink-300 mb-1">Subcolumn 3: QF</p>
+                  <p className="text-xs text-muted-foreground">4 matches | 8 → 4</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card className="glass-card border-border/30 bg-blue-950/20">
-              <CardHeader>
-                <CardTitle className="font-orbitron text-base">Round 1</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground space-y-1">
-                <p>16 matches</p>
-                <p>32 → 16 teams</p>
-              </CardContent>
-            </Card>
-            <Card className="glass-card border-border/30 bg-purple-950/20">
-              <CardHeader>
-                <CardTitle className="font-orbitron text-base">Round 2</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground space-y-1">
-                <p>8 matches</p>
-                <p>16 → 8 teams</p>
-              </CardContent>
-            </Card>
-            <Card className="glass-card border-border/30 bg-pink-950/20">
-              <CardHeader>
-                <CardTitle className="font-orbitron text-base">Quarterfinals</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground space-y-1">
-                <p>4 matches</p>
-                <p>8 → 4 teams</p>
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
-      </Card>
+        {/* COLUMN 3: Final Stage */}
+        <div className="space-y-4">
+          <Card className="glass-card border-border/30 bg-black/50">
+            <CardHeader>
+              <CardTitle className="font-orbitron text-xl">Column 3: Finals</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2">Top 4 → Winner</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {canEdit && (
+                <p className="text-xs text-yellow-400">✓ Admin Mode: Edit scores</p>
+              )}
 
-      {/* Section 3: Final Stage (Top 4) */}
-      <Card className="glass-card border-border/30 bg-black/50">
-        <CardHeader>
-          <CardTitle className="font-orbitron text-2xl">Section 3: Final Stage (Top 4 Teams)</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <p className="text-muted-foreground">
-            {canEdit ? "✓ Admin Mode: You can update final stage scores" : "Semi-finals and finals where top 4 teams compete"}
-          </p>
-
-          {/* Semifinals */}
-          <div>
-            <h4 className="font-orbitron text-lg mb-4 text-yellow-400">Semifinals (4 Teams → 2 Teams)</h4>
-            <div className="space-y-3">
-              {finalStage.semifinals.map((match, idx) => (
-                <div key={match.id} className="rounded-md border border-border/40 bg-black/80 text-white p-4">
-                  <div className="mb-3 flex items-center justify-between text-sm uppercase tracking-wide text-muted-foreground">
-                    <span className="font-semibold">Semifinal {idx + 1}</span>
-                    <Badge variant="outline">Upcoming</Badge>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-sm px-3 py-2 bg-gradient-to-r from-cyan-600/20 to-cyan-600/5 mb-2">
-                    <span className="truncate font-medium">{match.teamA}</span>
-                    {canEdit ? (
-                      <Input
-                        type="number"
-                        className="w-12 h-8 text-right bg-orange-500 text-black border-none rounded font-bold text-sm"
-                        value={match.scoreA}
-                        onChange={(e) => handleFinalScoreChange("semifinals", match.id, Number(e.target.value) || 0, match.scoreB)}
-                      />
-                    ) : (
-                      <span className="rounded bg-orange-500 px-2 py-1 font-orbitron text-black text-sm">{match.scoreA}</span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-sm px-3 py-2 bg-gradient-to-r from-cyan-600/20 to-cyan-600/5">
-                    <span className="truncate font-medium">{match.teamB}</span>
-                    {canEdit ? (
-                      <Input
-                        type="number"
-                        className="w-12 h-8 text-right bg-orange-500 text-black border-none rounded font-bold text-sm"
-                        value={match.scoreB}
-                        onChange={(e) => handleFinalScoreChange("semifinals", match.id, match.scoreA, Number(e.target.value) || 0)}
-                      />
-                    ) : (
-                      <span className="rounded bg-orange-500 px-2 py-1 font-orbitron text-black text-sm">{match.scoreB}</span>
-                    )}
+              {/* Subcolumn 1: Semifinals */}
+              <div className="space-y-2">
+                <div className="bg-cyan-950/30 border border-cyan-400/30 rounded-lg p-2.5">
+                  <p className="text-xs font-semibold text-cyan-300 mb-3">Subcolumn 1: Semifinals</p>
+                  <div className="space-y-2">
+                    {finalStage.semifinals.map((match, idx) => (
+                      <div key={match.id} className="rounded-md border border-border/40 bg-black/80 p-2">
+                        <p className="text-xs text-muted-foreground mb-1">SF {idx + 1}</p>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs truncate">{match.teamA}</span>
+                          {canEdit ? (
+                            <Input
+                              type="number"
+                              className="w-10 h-6 text-right bg-orange-500 text-black border-none rounded font-bold text-xs"
+                              value={match.scoreA}
+                              onChange={(e) => handleFinalScoreChange("semifinals", match.id, Number(e.target.value) || 0, match.scoreB)}
+                            />
+                          ) : (
+                            <span className="rounded bg-orange-500 px-1.5 py-0.5 font-orbitron text-black text-xs">{match.scoreA}</span>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs truncate">{match.teamB}</span>
+                          {canEdit ? (
+                            <Input
+                              type="number"
+                              className="w-10 h-6 text-right bg-orange-500 text-black border-none rounded font-bold text-xs"
+                              value={match.scoreB}
+                              onChange={(e) => handleFinalScoreChange("semifinals", match.id, match.scoreA, Number(e.target.value) || 0)}
+                            />
+                          ) : (
+                            <span className="rounded bg-orange-500 px-1.5 py-0.5 font-orbitron text-black text-xs">{match.scoreB}</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Finals */}
-          <div>
-            <h4 className="font-orbitron text-lg mb-4 text-yellow-400">Championship Finals (2 Teams → 1 Winner)</h4>
-            <div className="rounded-md border border-border/40 bg-gradient-to-br from-yellow-600/20 to-yellow-600/5 text-white p-4">
-              <div className="mb-3 flex items-center justify-between text-sm uppercase tracking-wide text-muted-foreground">
-                <span className="font-semibold text-yellow-400">Grand Finals</span>
-                <Badge className="bg-yellow-600/50 text-yellow-100">Upcoming</Badge>
               </div>
 
-              <div className="flex items-center justify-between rounded-sm px-3 py-3 bg-black/50 mb-2 border border-yellow-600/30">
-                <span className="truncate font-bold text-base">{finalStage.finals.teamA}</span>
-                {canEdit ? (
-                  <Input
-                    type="number"
-                    className="w-12 h-8 text-right bg-yellow-500 text-black border-none rounded font-bold text-sm"
-                    value={finalStage.finals.scoreA}
-                    onChange={(e) => handleFinalScoreChange("finals", "final", Number(e.target.value) || 0, finalStage.finals.scoreB)}
-                  />
-                ) : (
-                  <span className="rounded bg-yellow-500 px-3 py-2 font-orbitron text-black font-bold text-base">{finalStage.finals.scoreA}</span>
-                )}
+              {/* Subcolumn 2: Finals */}
+              <div className="space-y-2">
+                <div className="bg-yellow-950/40 border border-yellow-600/50 rounded-lg p-2.5">
+                  <p className="text-xs font-semibold text-yellow-300 mb-3">Subcolumn 2: Championship</p>
+                  <div className="rounded-md border-2 border-yellow-600/50 bg-black/80 p-2">
+                    <p className="text-xs text-yellow-400 mb-2 font-semibold">Grand Finals</p>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-bold truncate">{finalStage.finals.teamA}</span>
+                      {canEdit ? (
+                        <Input
+                          type="number"
+                          className="w-10 h-6 text-right bg-yellow-500 text-black border-none rounded font-bold text-xs"
+                          value={finalStage.finals.scoreA}
+                          onChange={(e) => handleFinalScoreChange("finals", "final", Number(e.target.value) || 0, finalStage.finals.scoreB)}
+                        />
+                      ) : (
+                        <span className="rounded bg-yellow-500 px-1.5 py-0.5 font-orbitron text-black font-bold text-xs">{finalStage.finals.scoreA}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold truncate">{finalStage.finals.teamB}</span>
+                      {canEdit ? (
+                        <Input
+                          type="number"
+                          className="w-10 h-6 text-right bg-yellow-500 text-black border-none rounded font-bold text-xs"
+                          value={finalStage.finals.scoreB}
+                          onChange={(e) => handleFinalScoreChange("finals", "final", finalStage.finals.scoreA, Number(e.target.value) || 0)}
+                        />
+                      ) : (
+                        <span className="rounded bg-yellow-500 px-1.5 py-0.5 font-orbitron text-black font-bold text-xs">{finalStage.finals.scoreB}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
-              <div className="flex items-center justify-between rounded-sm px-3 py-3 bg-black/50 border border-yellow-600/30">
-                <span className="truncate font-bold text-base">{finalStage.finals.teamB}</span>
-                {canEdit ? (
-                  <Input
-                    type="number"
-                    className="w-12 h-8 text-right bg-yellow-500 text-black border-none rounded font-bold text-sm"
-                    value={finalStage.finals.scoreB}
-                    onChange={(e) => handleFinalScoreChange("finals", "final", finalStage.finals.scoreA, Number(e.target.value) || 0)}
-                  />
-                ) : (
-                  <span className="rounded bg-yellow-500 px-3 py-2 font-orbitron text-black font-bold text-base">{finalStage.finals.scoreB}</span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 p-3 bg-yellow-400/10 border border-yellow-400/30 rounded-lg">
-            <p className="text-sm text-yellow-300">
-              🏆 <strong>Winners Advancement:</strong> SF winners advance to Finals. Finals winner is the champion!
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Tournament Summary */}
+      {/* Tournament Summary Footer */}
       <Card className="glass-card border-border/30 bg-gradient-to-r from-purple-900/20 to-pink-900/20">
         <CardHeader>
           <CardTitle className="font-orbitron text-lg">Tournament Summary</CardTitle>
@@ -407,7 +386,7 @@ const RCBracket = ({ canEdit = false }) => {
           </div>
           <div>
             <p className="text-2xl font-bold text-pink-400">1</p>
-            <p className="text-xs text-muted-foreground">Winner</p>
+            <p className="text-xs text-muted-foreground">Champion</p>
           </div>
         </CardContent>
       </Card>
