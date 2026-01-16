@@ -23,6 +23,7 @@ import LeaderboardFreeFire from "@/components/leaderboards/LeaderboardFreeFire";
 import LeaderboardMl from "@/components/leaderboards/LeaderboardMl";
 import LeaderboardCodm from "@/components/leaderboards/LeaderboardCodm";
 import LeaderboardSimple from "@/components/leaderboards/LeaderboardSimple";
+import RCBracket from "@/components/bracket/RCBracket";
 import LeaderboardValorant from "../components/leaderboards/LeaderboardValorant";
 
 // This is the mock event data, kept in the parent component
@@ -95,8 +96,16 @@ const specialVanguardArena = {
   participants: "150",
   prize: "5,000",
   status: "completed",
-  image: lockLoadHero, 
+  image: lockLoadHero,
   games: [
+    {
+      id: "rc",
+      name: "Real Cricket 24",
+      image: codImg,
+      participants: "32",
+      gameHead: { name: "TBA", phone: "TBA" },
+      format: "bracket",
+    },
     {
       id: "ml",
       name: "Mobile Legends",
@@ -214,6 +223,8 @@ const EventLeaderboard = () => {
 
     // Pass the correct props to each game component
     switch (gameId) {
+      case "rc":
+        return <RCBracket canEdit={canEdit} />;
       case "ml":
         return <LeaderboardMl eventId={eventId} game={selectedGame} canEdit={canEdit} />;
       case "bgmi":
