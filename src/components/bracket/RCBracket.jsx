@@ -112,41 +112,51 @@ const RCBracket = ({ canEdit = false }) => {
     return match.scoreA > match.scoreB ? match.teamA : match.teamB;
   };
 
-  const propagateWinnersToNextRound = (updatedBracket, columnIndex) => {
+  const propagateWinnersToNextRound = (updatedBracket, columnIndex, finalStage) => {
     // For each match in current column, get winner and place in next round
-    if (columnIndex >= updatedBracket.columns.length - 1) return updatedBracket;
-
     const currentMatches = updatedBracket.columns[columnIndex].matches;
-    const nextColumn = updatedBracket.columns[columnIndex + 1];
 
-    // Map each pair of matches to their winners
-    currentMatches.forEach((match, matchIndex) => {
-      const winner = getWinner(match);
-      const nextMatchIndex = Math.floor(matchIndex / 2);
-      const isTeamA = matchIndex % 2 === 0;
+    if (columnIndex < updatedBracket.columns.length - 1) {
+      // Not the last column, propagate to next column in bracket
+      const nextColumn = updatedBracket.columns[columnIndex + 1];
 
-      if (nextColumn.matches[nextMatchIndex]) {
-        if (winner) {
-          // Winner moves to next round
-          if (isTeamA) {
-            nextColumn.matches[nextMatchIndex].teamA = winner;
+      currentMatches.forEach((match, matchIndex) => {
+        const winner = getWinner(match);
+        const nextMatchIndex = Math.floor(matchIndex / 2);
+        const isTeamA = matchIndex % 2 === 0;
+
+        if (nextColumn.matches[nextMatchIndex]) {
+          if (winner) {
+            if (isTeamA) {
+              nextColumn.matches[nextMatchIndex].teamA = winner;
+            } else {
+              nextColumn.matches[nextMatchIndex].teamB = winner;
+            }
           } else {
-            nextColumn.matches[nextMatchIndex].teamB = winner;
-          }
-        } else {
-          // No winner yet (tie or no scores), set as TBD
-          if (isTeamA) {
-            nextColumn.matches[nextMatchIndex].teamA = "TBD";
-          } else {
-            nextColumn.matches[nextMatchIndex].teamB = "TBD";
+            if (isTeamA) {
+              nextColumn.matches[nextMatchIndex].teamA = "TBD";
+            } else {
+              nextColumn.matches[nextMatchIndex].teamB = "TBD";
+            }
           }
         }
-      }
-    });
+      });
 
-    // Recursively propagate to next rounds
-    if (columnIndex + 1 < updatedBracket.columns.length - 1) {
-      return propagateWinnersToNextRound(updatedBracket, columnIndex + 1);
+      // Recursively propagate to next rounds
+      if (columnIndex + 1 < updatedBracket.columns.length - 1) {
+        return propagateWinnersToNextRound(updatedBracket, columnIndex + 1, finalStage);
+      }
+    } else if (columnIndex === updatedBracket.columns.length - 1) {
+      // Last column (Quarterfinals) - propagate to finals
+      const winners = currentMatches.map(match => getWinner(match) || "TBD");
+
+      if (finalStage) {
+        // Update semifinals with quarterfinal winners
+        finalStage.semifinals[0].teamA = winners[0] || "TBD";
+        finalStage.semifinals[0].teamB = winners[1] || "TBD";
+        finalStage.semifinals[1].teamA = winners[2] || "TBD";
+        finalStage.semifinals[1].teamB = winners[3] || "TBD";
+      }
     }
 
     return updatedBracket;
