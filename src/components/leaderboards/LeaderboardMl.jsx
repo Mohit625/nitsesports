@@ -1,6 +1,6 @@
 // src/components/leaderboards/LeaderboardMl.jsx
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState , useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -107,11 +107,16 @@ const getGroupRowsForGame = (group, groupsState) => {
 const LeaderboardMl = ({ eventId, game, canEdit }) => {
   // ✅ Vanguard Arena => 8 groups of 4 teams
   const isVanguardArena = eventId === "vanguardarena";
-  const GROUP_LETTERS = isVanguardArena ? GROUP_LETTERS_8 : GROUP_LETTERS_4;
+  const GROUP_LETTERS = useMemo(
+  () => (isVanguardArena ? GROUP_LETTERS_8 : GROUP_LETTERS_4),
+  [isVanguardArena]
+);
+
 
   // ✅ Vanguard => 4 teams per group
   // ⚠️ If you want Lock&Load to also show default teams, set a number like 5 or 8
-  const rowsPerGroup = 4;
+ const rowsPerGroup = useMemo(() => 4, []);
+
 
   // ✅ Prevent "previous event data hindering"
   const leaderboardKey = isVanguardArena ? "ml-vanguard-8groups" : "default";
@@ -506,7 +511,8 @@ const LeaderboardMl = ({ eventId, game, canEdit }) => {
     return () => {
       cancelled = true;
     };
-  }, [eventId, game.id, buildMlBracketFromGroups, GROUP_LETTERS, rowsPerGroup, leaderboardKey]);
+  }, [eventId, game.id, GROUP_LETTERS, rowsPerGroup, leaderboardKey]);
+
 
   /** --------------------------------
    * SAVE SNAPSHOT
