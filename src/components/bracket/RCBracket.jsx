@@ -7,14 +7,14 @@ import { Input } from "@/components/ui/input.jsx";
 import { Trash2, Plus, Edit2, Check, X, ChevronDown } from "lucide-react";
 
 const defaultTeams = [
-  "Phoenix Rising", "Dragon Slayers", "Thunder Knights", "Elite Gamers",
-  "Victory Squad", "Crimson Force", "Iron Titans", "Shadow Warriors",
-  "Apex Legends", "Nova Team", "Inferno Crew", "Stellar Squad",
-  "Divine Gaming", "Chaos Masters", "Legends Unite", "Mystic Rangers",
-  "Alpha Force", "Thunder Squad", "Victory Eagles", "Blaze Team",
-  "Titan Power", "Storm Chasers", "Elite Warriors", "Sonic Speed",
-  "Quantum Kings", "Vortex Gaming", "Solar Flares", "Thunder Bolt",
-  "Eclipse Team", "Infinity Squad", "Nexus Warriors", "Prime Legends"
+  "One man army", "Mani", "Kanya rasi 007", "Backtracker",
+"Knight", "Cricket-Paglu", "Stump smashers", "Virat Coolie",
+"Hobart Hurricanes", "Team Sindoor", "Kolkata Blasters", "TEAM-EAGLE",
+"Dominators", "RCB1", "WarriorsX", "Sher-e-saltanat",
+"Prashun_27", "Tigers", "Kakashi", "STRIKERS",
+"Nakul", "Shadow Scorchers", "Team CSK", "RCB",
+"Brutal 11", "What about me", "Destroyers", "Smashers",
+"CSK1", "The Green Flags", "Subhasish Saikia", "CricFire"
 ];
 
 const RCBracket = ({ canEdit = false }) => {
