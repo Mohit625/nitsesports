@@ -311,6 +311,44 @@ const RCBracket = ({ canEdit = false }) => {
       icon: "⭐"
     }
   ];
+  const getTop6 = () => {
+  const first =
+    finalStage.finals.scoreA !== finalStage.finals.scoreB
+      ? finalStage.finals.scoreA > finalStage.finals.scoreB
+        ? finalStage.finals.teamA
+        : finalStage.finals.teamB
+      : "TBD";
+
+  const second =
+    first === finalStage.finals.teamA
+      ? finalStage.finals.teamB
+      : finalStage.finals.teamA;
+
+  const third =
+    finalStage.placementMatches.thirdPlace.scoreA >
+    finalStage.placementMatches.thirdPlace.scoreB
+      ? finalStage.placementMatches.thirdPlace.teamA
+      : finalStage.placementMatches.thirdPlace.teamB;
+
+  const fourth =
+    third === finalStage.placementMatches.thirdPlace.teamA
+      ? finalStage.placementMatches.thirdPlace.teamB
+      : finalStage.placementMatches.thirdPlace.teamA;
+
+  const fifth =
+    finalStage.placementMatches.fifthSixthBracket[2].scoreA >
+    finalStage.placementMatches.fifthSixthBracket[2].scoreB
+      ? finalStage.placementMatches.fifthSixthBracket[2].teamA
+      : finalStage.placementMatches.fifthSixthBracket[2].teamB;
+
+  const sixth =
+    fifth === finalStage.placementMatches.fifthSixthBracket[2].teamA
+      ? finalStage.placementMatches.fifthSixthBracket[2].teamB
+      : finalStage.placementMatches.fifthSixthBracket[2].teamA;
+
+  return { first, second, third, fourth, fifth, sixth };
+};
+
 
   return (
     <div className="space-y-6">
