@@ -123,7 +123,7 @@ const RCBracket = ({ canEdit = false }) => {
           teamB: teamList[i * 2 + 1] || "TBD",
           scoreA: 0,
           scoreB: 0,
-          status: "upcoming",
+          status: "",
           time: null
         }))
       },
@@ -134,7 +134,7 @@ const RCBracket = ({ canEdit = false }) => {
           teamB: "TBD",
           scoreA: 0,
           scoreB: 0,
-          status: "upcoming",
+          status: "",
           time: null
         }))
       },
@@ -145,7 +145,7 @@ const RCBracket = ({ canEdit = false }) => {
           teamB: "TBD",
           scoreA: 0,
           scoreB: 0,
-          status: "upcoming",
+          status: "",
           time: null
         }))
       }
