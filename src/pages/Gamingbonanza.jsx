@@ -14,7 +14,7 @@ const games = [
   { id: "fifa", name: "FIFA 25", image: "https://res.cloudinary.com/dboqkwvhv/image/upload/v1761372618/FIFA_tzgbj9.jpg", brochure: "https://gamma.app/docs/TECNOESIS-CUP-mlbb-h5oottx9xnwqnet", prize: 5000 },
 ];
 
-const CLOSED_GAMES = new Set(["rc", "bgmi", "valorant", "ml"]);
+const CLOSED_GAMES = new Set(["rc", "bgmi", "valorant", "ml", "fifa"]);
 
 const VanguardArena = () => {
   const [toastMessage, setToastMessage] = useState("");

@@ -19,7 +19,7 @@ const FreeFire = () => {
     id: "ficfreefire",
     title: "RUPYVERSE",
     subtitle: "Free Fire Tournament by Finance and Investment Club",
-    date: "19-22 January",
+    date: "25-26 January",
     location: "CC BUILDING",
     colaboratedby: "NITS ESPORTS CLUB",
     //participants: "184",
