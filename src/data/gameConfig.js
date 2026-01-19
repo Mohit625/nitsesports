@@ -32,7 +32,7 @@ export const gameConfig = {
     name: "COD Mobile",
     playerCount: 5,
     substituteCount: 1,
-    price: { nits: 100, other: 250 },
+    price: { nits: 100, other: 1 },
   },
   ml: {
     id: "ml",
